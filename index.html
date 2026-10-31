@@ -42,11 +42,10 @@ footer{text-align:center;color:#777;padding:25px;font-size:12px}
   <p class="status" id="fileStatus">No video selected</p>
   <p class="note">Upload a video that you own or have permission to use.</p>
  </div>
-
- <div class="card">
+< class="card">
   <h2>🔗 Video link</h2>
   <input id="videoUrl" type="url" placeholder="Paste a supported video URL">
-  <p class="note">A link alone does not download or process a video. Supported access must be configured on the server.</p>
+  <p class="notdive">A link alone does not download or process a video. Supported access must be configured on the server.</p>
  </div>
 
  <div class="card">
@@ -87,7 +86,7 @@ footer{text-align:center;color:#777;padding:25px;font-size:12px}
   <div class="feature">✓ Important highlights</div>
   <div class="feature">✓ Automatic captions</div>
   <p class="note">These AI features will work after the processing backend is connected.</p>
-  <button id="create" disabled>AI processing not connected yet</button>
+  <button id="create">Upload test video</button>
   <p id="status" class="status">Select a video to see its preview.</p>
  </div>
 
@@ -120,6 +119,39 @@ fileInput.addEventListener('change',()=>{
  fileStatus.textContent="Selected: "+file.name;
  status.textContent="Video ready for preview. AI processing backend is not connected.";
 });
+const createButton = document.getElementById('create');
+
+createButton.addEventListener('click', async () => {
+  const file = fileInput.files[0];
+
+  if (!file) {
+    status.textContent = 'Please select a video first.';
+    return;
+  }
+
+  createButton.disabled = true;
+  status.textContent = 'Uploading video...';
+
+  const formData = new FormData();
+  formData.append('video', file);
+
+  try {
+    const response = await fetch(
+      'https://clipping-t9ce.onrender.com/upload',
+      {
+        method: 'POST',
+        body: formData
+      }
+    );
+
+    const result = await response.json();
+    status.textContent = result.message || 'Upload completed.';
+  } catch (error) {
+    status.textContent = 'Upload failed. Please try again.';
+  } finally {
+    createButton.disabled = false;
+  }
+}); 
 </script>
 </body>
 </html>
