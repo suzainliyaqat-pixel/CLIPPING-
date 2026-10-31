@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090914">
+<title>CLIPPER - AI Video Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090914;color:#fff;font-family:Arial,sans-serif}
+header{padding:22px;text-align:center;border-bottom:1px solid #292940}
+.logo{font-size:32px;font-weight:900;color:#a18bff;letter-spacing:2px}
+header p{color:#999;font-size:13px}
+main{max-width:650px;margin:auto;padding:18px}
+.card{background:#171727;border:1px solid #292940;border-radius:17px;padding:19px;margin:17px 0}
+h2{font-size:18px;margin-top:0}
+p{line-height:1.5}
+label{display:block;color:#c9c5dc;font-size:13px;margin:13px 0 6px}
+input,select{width:100%;padding:13px;border-radius:10px;background:#24243a;color:white;border:1px solid #41415b}
+button{width:100%;padding:14px;border:0;border-radius:11px;background:#8065ff;color:white;font-size:15px;font-weight:bold;margin-top:14px}
+button:disabled{opacity:.5}
+.secondary{background:#292940}
+video{width:100%;margin-top:13px;border-radius:12px;background:#000}
+.note{font-size:12px;color:#aaa}
+.status{color:#b7a7ff;font-size:13px;overflow-wrap:anywhere}
+.feature{color:#d6d0ff;font-size:14px;margin:10px 0}
+footer{text-align:center;color:#777;padding:25px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">✂ CLIPPER</div>
+ <p>Long Videos. Short Stories. One Studio.</p>
+</header>
+
+<main>
+ <div class="card">
+  <h2>🎬 Upload your video</h2>
+  <input id="file" type="file" accept="video/*">
+  <video id="preview" controls hidden></video>
+  <p class="status" id="fileStatus">No video selected</p>
+  <p class="note">Upload a video that you own or have permission to use.</p>
+ </div>
+
+ <div class="card">
+  <h2>🔗 Video link</h2>
+  <input id="videoUrl" type="url" placeholder="Paste a supported video URL">
+  <p class="note">A link alone does not download or process a video. Supported access must be configured on the server.</p>
+ </div>
+
+ <div class="card">
+  <h2>⚙️ Clip settings</h2>
+  <label>Clip duration</label>
+  <select id="duration">
+   <option value="30">30 seconds</option>
+   <option value="45">45 seconds</option>
+   <option value="60">60 seconds</option>
+  </select>
+
+  <label>Caption language</label>
+  <select id="language">
+   <option value="English">English</option>
+   <option value="Hindi">Hindi</option>
+   <option value="Both">Hindi + English</option>
+  </select>
+
+  <label>Video format</label>
+  <select id="format">
+   <option value="9:16">9:16 Vertical - Shorts / Reels</option>
+   <option value="16:9">16:9 Landscape</option>
+   <option value="1:1">1:1 Square</option>
+  </select>
+
+  <label>Number of clips wanted</label>
+  <select id="count">
+   <option>3</option>
+   <option>5</option>
+   <option>10</option>
+  </select>
+ </div>
+
+ <div class="card">
+  <h2>✨ Your clip preferences</h2>
+  <div class="feature">✓ Interesting moments</div>
+  <div class="feature">✓ Funny and engaging moments</div>
+  <div class="feature">✓ Important highlights</div>
+  <div class="feature">✓ Automatic captions</div>
+  <p class="note">These AI features will work after the processing backend is connected.</p>
+  <button id="create" disabled>AI processing not connected yet</button>
+  <p id="status" class="status">Select a video to see its preview.</p>
+ </div>
+
+ <div class="card">
+  <h2>🚀 Coming next</h2>
+  <p class="feature">• AI highlight detection</p>
+  <p class="feature">• Automatic subtitles</p>
+  <p class="feature">• Vertical video editing</p>
+  <p class="feature">• MP4 clip downloads</p>
+  <p class="note">These require a separate server and video-processing engine.</p>
+ </div>
+</main>
+
+<footer>CLIPPER © 2026</footer>
+
+<script>
+const fileInput=document.getElementById('file');
+const preview=document.getElementById('preview');
+const fileStatus=document.getElementById('fileStatus');
+const status=document.getElementById('status');
+let currentUrl=null;
+
+fileInput.addEventListener('change',()=>{
+ const file=fileInput.files[0];
+ if(!file)return;
+ if(currentUrl)URL.revokeObjectURL(currentUrl);
+ currentUrl=URL.createObjectURL(file);
+ preview.src=currentUrl;
+ preview.hidden=false;
+ fileStatus.textContent="Selected: "+file.name;
+ status.textContent="Video ready for preview. AI processing backend is not connected.";
+});
+</script>
+</body>
+</html>
